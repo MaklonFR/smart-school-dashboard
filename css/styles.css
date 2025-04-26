@@ -225,11 +225,12 @@
     width: 80px;
   }
   .traffic-light {
-      background: linear-gradient(to bottom right, #1f1f1f, #030111);
-      padding: 10px;
-      border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    background: linear-gradient(to bottom right, #1f1f1f, #030111);
+    padding: 10px;
+    border-radius: 10px;
+    border: 0.5px solid var(--primary-text);
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
 
   .traffic-light .label {
