@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Smart School</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="shortcut icon" href="img/favicon.png" type="image/x-icon">
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Logo SMK" />
+    <h1>SMART SYSTEM SMK NEGERI 1 KUWUS - MANGGARAI BARAT NTT</h1>
+    <button class="login-btn">Login</button>
+  </header>
+  <div style="margin: 10px; text-align: right;" id="status"></div>
+  <div style="margin: 10px; text-align: right;" id="status_traffic"></div>
+  <div class="tabs">
+    <button class="tab-button active" onclick="openTab(event, 'statistik')">Statistik</button>
+    <button class="tab-button" onclick="openTab(event, 'iot')">IoT Kontrol</button>
+    <button class="tab-button" onclick="openTab(event, 'traffic')">Traffic Light</button>
+    <button class="tab-button" onclick="openTab(event, 'kontrol')">Sistem Kontrol</button>
+  </div>
+
+  <div id="statistik" class="tab-content active">
+    <h2>Statistik Sekolah</h2>
+    <div class="dashboard">
+        <!-- Widget 1 -->
+        <div class="widget">
+        <h3><i class="fas fa-chalkboard-teacher icon"></i>Guru & Pegawai</h3>
+        <div class="chart-container">
+            <canvas id="chartGuru"></canvas>
+        </div>
+        <div class="widget-content">
+            <div class="stat">Guru: <span id="jumlahGuru"></span></div>
+            <div class="stat">Pegawai: <span id="pegawai"></span></div>
+            <div class="stat">Guru Sertifikasi: <span id="guruSertifikasi"></span></div>
+            <div class="stat">Guru Belum Sertifikasi: <span id="guruBelum"></span></div>
+        </div>
+        </div>
+
+        <!-- Widget 2 -->
+        <div class="widget">
+        <h3><i class="fas fa-user-graduate icon"></i>Peserta Didik</h3>
+        <div class="chart-container">
+            <canvas id="chartSiswa"></canvas>
+        </div>
+        <div class="widget-content">
+            <div class="stat">Siswa: <span id="totalSiswa"></span></div>
+            <div class="stat">Laki-laki: <span id="siswaLaki"></span></div>
+            <div class="stat">Perempuan: <span id="siswaPerempuan"></span></div>
+            <div class="stat">APAT: <span id="apat"></span></div>
+            <div class="stat">ATPH: <span id="atph"></span></div>
+            <div class="stat">ATR: <span id="atr"></span></div>
+            <div class="stat">RPL: <span id="rpl"></span></div>
+            <div class="stat">UPW: <span id="upw"></span></div>
+        </div>
+        </div>
+
+        <!-- Widget 3 -->
+        <div class="widget">
+        <h3><i class="fas fa-school icon"></i>Sapras</h3>
+        <div class="chart-container">
+            <canvas id="chartFasilitas"></canvas>
+        </div>
+        <div class="widget-content">
+            <div class="stat">Ruang Kelas: <span id="ruangKelas"></span></div>
+            <div class="stat">Laboratorium: <span id="lab"></span></div>
+            <div class="stat">Perpustakaan: <span id="perpustakaan"></span></div>
+            <div class="stat">WC: <span id="wc"></span></div>
+        </div>
+        </div>
+
+        <!-- Widget 4 -->
+        <div class="widget">
+        <h4><i class="fas fa-users icon"></i>Alumni (3 Tahun Terakhir)</h4>
+        <div class="chart-container">
+            <canvas id="alumniChart"></canvas>
+        </div>
+        <div class="widget-content">
+            <div class="stat">Bekerja: <span id="bekerja"></span></div>
+            <div class="stat">Lanjut Studi: <span id="lanjutStudi"></span></div>
+            <div class="stat">Wirausaha: <span id="wirausaha"></span></div>
+            <div class="stat">Belum Bekerja: <span id="belumBekerja"></span></div>
+        </div>
+        </div>
+    </div>
+  </div>
+
+  <div id="kontrol" class="tab-content">
+    <h2>Sistem Kontrol Lampu</h2>
+    <div class="lamp-container">
+      <div class="lamp-widget">
+        <img src="img/off-lamp.png" alt="lampu">
+        <h4 id="subT">Ruang Teras</h4>
+        <button onclick="toggleLamp(this)">ON</button>
+      </div>
+      <div class="lamp-widget">
+        <img src="img/off-lamp.png" alt="lampu">
+        <h4 id="subT">Ruang Kantor</h4>
+        <button onclick="toggleLamp(this)">ON</button>
+      </div>
+      <div class="lamp-widget">
+        <img src="img/off-lamp.png" alt="lampu">
+        <h4 id="subT">Ruang Kelas</h4>
+        <button onclick="toggleLamp(this)">ON</button>
+      </div>
+      <div class="lamp-widget">
+        <img src="img/off-lamp.png" alt="lampu">
+        <h4 id="subT">Ruang Lab</h4>
+        <button onclick="toggleLamp(this)">ON</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="iot" class="tab-content">
+    <h2>IoT Temperatur Ruangan</h2>
+    <div class="iot-container-btn ">
+      <button id="alarm-off-btn" class="traffic-btn stop-alarm-btn" onclick="stopAlarm()" disabled>Stop Alarm</button>
+    </div> 
+    <div class="iot-container">
+      <div class="iot-temp">
+        IoT Sistem Pembenihan Ikan <strong>(APAT)</strong>
+            <div class="iot-temp-container" id="sensor-data">
+                <div class="iot-temp-list">
+                    <p>Suhu</p>
+                    <strong id="temperature">--</strong>
+                </div>
+                <div class="iot-temp-list">
+                    <p>Kelembaban</p>
+                    <strong id="pressure">--</strong>
+                </div>
+                <div class="iot-temp-list">
+                    <p>Tekanan Udara</p>
+                    <strong id="altitude">--</strong>
+                </div>
+            </div>
+        </div>
+        <div class="iot-temp">
+        IoT Sistem Penetesan Telur <strong>(ATR)</strong>
+          <div class="iot-temp-container" id="sensor-data">
+            <div class="iot-temp-list">
+                <p>Suhu</p>
+                <strong id="temperature-atr">--</strong>
+            </div>
+            <div class="iot-temp-list">
+                <p>Kelembaban</p>
+                <strong id="pressure-atr">--</strong>
+            </div>
+            <div class="iot-temp-list">
+                <p>Tekanan Udara</p>
+                <strong id="altitude-atr">--</strong>
+            </div>
+          </div>
+        </div>
+        <audio id="alarm" src="https://smkn1kuwus.sch.id//IoT/audio/suhu-1.mp3" preload="auto"></audio>
+    </div>
+  </div>
+
+  <div id="traffic" class="tab-content">
+    <h2>IoT Traffic Light</h2>
+    <div class="mulai-traffic">
+        <button id="startBtn" class="traffic-btn mulai-btn">Mulai</button>
+        <button id="stopBtn" class="traffic-btn stop-btn">Stop</button>
+    </div>
+    <div class="traffic-container">
+    <div class="traffic-light-container">
+      <div class="traffic-light">
+          <div class="label">Jalur 1</div>
+          <div class="light red" id="jalur1-red"></div>
+          <div class="light yellow" id="jalur1-yellow"></div>
+          <div class="light green" id="jalur1-green"></div>
+      </div>
+      <div class="traffic-light">
+          <div class="label">Jalur 2</div>
+          <div class="light red" id="jalur2-red"></div>
+          <div class="light yellow" id="jalur2-yellow"></div>
+          <div class="light green" id="jalur2-green"></div>
+      </div>
+      <div class="traffic-light">
+          <div class="label">Jalur 3</div>
+          <div class="light red" id="jalur3-red"></div>
+          <div class="light yellow" id="jalur3-yellow"></div>
+          <div class="light green" id="jalur3-green"></div>
+      </div>
+      <div class="traffic-light">
+          <div class="label">Jalur 4</div>
+          <div class="light red" id="jalur4-red"></div>
+          <div class="light yellow" id="jalur4-yellow"></div>
+          <div class="light green" id="jalur4-green"></div>
+      </div>
+    </div>
+    </div>
+  </div>
+
+
+  <footer style="text-align:center; padding:20px; background-color:#1e1e1e; color:#aaa; font-size:14px; border-top:1px solid #333;">
+    &copy; 2025 SMART SYSTEM - SMK Negeri 1 Kuwus, Manggarai Barat, NTT
+  </footer>
+
+  <script type="text/javascript" src="js/script.js"></script>
+</body>
+</html>
